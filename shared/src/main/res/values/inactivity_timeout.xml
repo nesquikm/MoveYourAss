@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="inactivity_timeout_values" translatable="false">
+        <item>5</item>
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+        <item>90</item>
+        <item>120</item>
+    </integer-array>
+    <integer name="inactivity_timeout_value_default" translatable="false">45</integer>
+</resources>

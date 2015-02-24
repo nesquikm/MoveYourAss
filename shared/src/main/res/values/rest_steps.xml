@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="rest_steps_values" translatable="false">
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+        <item>250</item>
+        <item>500</item>
+    </integer-array>
+    <integer name="rest_steps_value_default" translatable="false">50</integer>
+</resources>

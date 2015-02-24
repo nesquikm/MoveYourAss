@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Move your ass!</string>
+
+    <string name="my_rest">My rest</string>
+
+    <string name="inactivity_timeout">Inactivity timeout</string>
+
+    <string name="minimum_rest">Minimum rest</string>
+
+    <plurals name="steps">
+        <item quantity="one">%1$s step</item>
+        <item quantity="other">%1$s steps</item>
+    </plurals>
+
+    <string name="do_not_disturb">Do not disturb</string>
+    <string name="when_driving">When I am driving or cycling</string>
+    <string name="time_interval">Time interval</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End time</string>
+    <string name="dnd_hours_end_text">%1$s %2$s</string>
+    <string name="next_day">next day</string>
+
+    <plurals name="minutes">
+        <item quantity="one">%1$s minute</item>
+        <item quantity="other">%1$s minutes</item>
+    </plurals>
+
+    <string name="snooze_for">Snooze...</string>
+
+    <string name="action_settings">Settings</string>
+
+</resources>

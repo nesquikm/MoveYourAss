@@ -1,0 +1,158 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="mya.greenlog.com.moveyourass.SettingsFragment">
+
+    <!-- content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/card_content_margin"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Widget.Card.TitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/my_rest"/>
+
+        <LinearLayout
+            android:id="@+id/layout_inactivity_timeout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clickable="true"
+            style="@style/Widget.LayoutList">
+
+            <TextView
+                style="@style/Widget.Card.SubTitleText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/inactivity_timeout"/>
+
+            <Spinner
+                android:id="@+id/spinner_inactivity_timeout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_minimum_rest_steps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clickable="true"
+            style="@style/Widget.LayoutList">
+
+            <TextView
+                style="@style/Widget.Card.SubTitleText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/minimum_rest"/>
+
+            <Spinner
+                android:id="@+id/spinner_minimum_rest_steps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"/>
+        </LinearLayout>
+
+        <TextView
+            style="@style/Widget.Card.TitleTextSecond"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/do_not_disturb"/>
+
+        <LinearLayout
+            android:id="@+id/layout_dnd_driving"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:clickable="true"
+            style="@style/Widget.LayoutList">
+
+            <TextView
+                style="@style/Widget.Card.SubTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/when_driving"
+                android:layout_weight="1"
+                />
+
+            <Switch
+                android:id="@+id/switch_dnd_driving"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_dnd_hours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:clickable="true"
+            style="@style/Widget.LayoutList">
+
+            <TextView
+                style="@style/Widget.Card.SubTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time_interval"
+                android:layout_weight="1"
+                />
+
+            <Switch
+                android:id="@+id/switch_dnd_hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/layout_dnd_start_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clickable="true"
+            style="@style/Widget.LayoutList">
+
+            <TextView
+                style="@style/Widget.Card.SubTitleText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_time"/>
+
+            <TextView
+                android:id="@+id/text_dnd_start_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Card.ValueText"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_dnd_end_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clickable="true"
+            style="@style/Widget.LayoutList">
+
+            <TextView
+                style="@style/Widget.Card.SubTitleText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/end_time"/>
+
+            <TextView
+                android:id="@+id/text_dnd_end_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Card.ValueText"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

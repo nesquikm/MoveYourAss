@@ -1,0 +1,34 @@
+<resources>
+    <string name="service_label">MYA service</string>
+
+    <string name="need_rest_title">Move!</string>
+    <string name="need_rest_content">You need a rest.</string>
+
+    <string name="need_rest_action_snooze_select">Snooze...</string>
+
+    <string name="rest_completed_title">Congrats!</string>
+    <string name="rest_completed_content">Rest completed.</string>
+
+    <string name="notifications_suspended">Notifications suspended</string>
+    <string name="you_moving">You are moving</string>
+    <string name="you_not_moving">You are not moving</string>
+    <string name="you_need_rest">You need a rest!</string>
+
+
+    <string name="notification_suspended_forever">You turned off the notifications for an indefinite period. You can enable it now.</string>
+    <string name="notification_suspended_dnd_hours">Notification are suspended due DND hours.</string>
+    <string name="notification_suspended_temporarily">Notification are temporarily suspended. You can enable it now.</string>
+    <string name="notification_suspended_until_tomorrow">Notification are suspended until tomorrow. You can enable it now.</string>
+    <string name="notification_suspended_until_next_overstay">Notification are suspended until your next overstay. You can enable it now.</string>
+    <string name="notification_suspended_dnd_driving">Notification are suspended due to the fact that you are probably driving a car or riding a bicycle now.</string>
+
+    <string name="last_step_detected_less_minute_ago">Last step detected less than a minute ago.</string>
+    <string name="last_step_detected_minutes_ago">Last step detected %1$s ago.</string>
+    <string name="steps_to_complete_rest">%1$s steps to complete the rest.</string>
+
+    <string name="snooze_notifications_select">Snooze notifications...</string>
+    <string name="enable_notifications">Enable notifications</string>
+
+    <string name="keep_going">Keep going!</string>
+
+</resources>

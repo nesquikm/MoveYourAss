@@ -1,0 +1,51 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/indigo_500</item>
+        <item name="colorPrimaryDark">@color/indigo_900</item>
+        <item name="colorAccent">@color/pink_a200</item>
+        <item name="android:spinnerItemStyle">@style/TextViewSpinnerItem</item>
+    </style>
+
+    <style name="TextViewSpinnerItem" parent="@android:style/Widget.TextView.SpinnerItem">
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+    </style>
+
+    <style name="Widget"/>
+
+    <style name="Widget.Card" parent="Widget">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">@dimen/card_margin</item>
+        <item name="cardCornerRadius">2dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="contentPadding">@dimen/card_padding</item>
+    </style>
+
+    <style name="Widget.Card.TitleText" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/indigo_500</item>
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+
+    <style name="Widget.Card.TitleTextSecond" parent="Widget.Card.TitleText">
+        <item name="android:layout_marginTop">16dp</item>
+    </style>
+
+    <style name="Widget.Card.SubTitleText" parent="TextAppearance.AppCompat.Body1">
+    </style>
+
+    <style name="Widget.Card.SubTitleText2" parent="Widget.Card.SubTitleText">
+        <item name="android:layout_marginBottom">4dp</item>
+    </style>
+
+    <style name="Widget.Card.ValueText" parent="TextAppearance.AppCompat.Subhead">
+        <item name="android:layout_marginBottom">4dp</item>
+    </style>
+
+    <style name="Widget.LayoutList" parent="Widget">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+</resources>
