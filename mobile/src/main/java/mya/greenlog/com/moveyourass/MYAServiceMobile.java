@@ -144,7 +144,7 @@ public class MYAServiceMobile extends MYAService {
                 .setAutoCancel(true)
                 .setLocalOnly(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setLights(0xffff0000, 500, 500)
+                .setLights(0xff3f51b5, 500, 500)
                 .setVibrate(VIBRATION_PATTERN_NEED_REST)
                 .setSound(alarmSound)
                 .build();
