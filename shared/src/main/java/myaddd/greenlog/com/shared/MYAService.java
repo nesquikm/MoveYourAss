@@ -328,8 +328,7 @@ public abstract class MYAService extends Service implements SensorEventListener,
     }
 
     private void sendStateToClients(State.SuspendState suspendState, long lastStepDetectedAgo, long restStepsNeed) {
-        // TODO: removing inside the loop
-//        for (Messenger to : mClients) {
+        // removing inside the loop! :)
         for (int i = mClients.size() - 1; i >= 0; i--) {
             sendStateToClient(mClients.get(i), suspendState, lastStepDetectedAgo, restStepsNeed);
         }

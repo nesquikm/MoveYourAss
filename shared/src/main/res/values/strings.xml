@@ -18,7 +18,7 @@
     <string name="notification_suspended_forever">You turned off the notifications for an indefinite period. You can enable it now.</string>
     <string name="notification_suspended_dnd_hours">Notification are suspended due DND hours.</string>
     <string name="notification_suspended_temporarily">Notification are temporarily suspended. You can enable it now.</string>
-    <string name="notification_suspended_until_tomorrow">Notification are suspended until tomorrow. You can enable it now.</string>
+    <string name="notification_suspended_until_tomorrow">Notification are suspended until tomorrow (end of DND hours). You can enable it now.</string>
     <string name="notification_suspended_until_next_overstay">Notification are suspended until your next overstay. You can enable it now.</string>
     <string name="notification_suspended_dnd_driving">Notification are suspended due to the fact that you are probably driving a car or riding a bicycle now.</string>
 
