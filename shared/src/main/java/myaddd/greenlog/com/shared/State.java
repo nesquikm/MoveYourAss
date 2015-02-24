@@ -123,8 +123,8 @@ public class State {
     }
 
 
-    public synchronized void setDriving() {
-        updateIsDriving(now(), true);
+    public synchronized void setDriving(boolean isDriving) {
+        updateIsDriving(now(), isDriving);
         analyzeState(true);
     }
 
@@ -360,11 +360,15 @@ public class State {
             }
         }
 
-        // TODO: setDriving() should provide boolean!
-        // Check for DNDDriving, only clear (set by sensors)
+        // Check for DNDDriving
         if (mSuspendState == SuspendState.DNDDriving) {
-            if (now > mSuspendStateChangedTime + DND_DRIVING_CLEAR_TIMEOUT_MS) {
+            if (!mSettingsManager.readDNDDrivingEnabled() || (now > mSuspendStateChangedTime + DND_DRIVING_CLEAR_TIMEOUT_MS && !mIsDriving)) {
                 updateSuspend(now, SuspendState.NotSuspended, 0);
+                isSuspendStateChanged = true;
+            }
+        } else {
+            if (mSuspendState == SuspendState.NotSuspended && mSettingsManager.readDNDDrivingEnabled() && mIsDriving) {
+                updateSuspend(now, SuspendState.DNDDriving, 0);
                 isSuspendStateChanged = true;
             }
         }

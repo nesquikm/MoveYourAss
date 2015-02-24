@@ -2,10 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="mya.greenlog.com.moveyourass">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"/>
+
     <uses-feature
         android:name="android.hardware.sensor.stepcounter"
-        android:required="true"></uses-feature>
+        android:required="true"/>
 
     <application
         android:allowBackup="true"

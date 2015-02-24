@@ -8,26 +8,56 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Handler;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.ActivityRecognition;
+import com.google.android.gms.location.ActivityRecognitionResult;
+import com.google.android.gms.location.DetectedActivity;
 
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import myaddd.greenlog.com.shared.MYAService;
 import myaddd.greenlog.com.shared.SnoozeModes;
 import myaddd.greenlog.com.shared.State;
 
 public class MYAServiceMobile extends MYAService {
+    private static final String TAG = MYAService.class.getSimpleName();
+
     private NotificationManager mNotificationManager;
     private static final long[] VIBRATION_PATTERN_NEED_REST = {0, 150, 500, 150, 500, 150};
     private static final long[] VIBRATION_PATTERN_REST_COMPLETED = {0, 300};
     private static final long NOTIFICATION_REST_COMPLETED_TIMEOUT_MS = 1000 * 15;
+
+    public static final String COMMAND_ACTIVITY_CHANGED = "myaddd.greenlog.com.shared.COMMAND_ACTIVITY_CHANGED";
+
+    private GoogleApiClient mGoogleApiClientAR;
+    private PendingIntent mARPIntent;
+    private static final long ACTIVITY_DETECTION_INTERVAL_MILLIS = 15 * 1000;
+
+    private Timer mDelayedNotifyCancelTimer;
 
     @Override
     public void onCreate() {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         super.onCreate();
+
+        startActivityRecognition();
+    }
+
+    @Override
+    public void onDestroy() {
+        stopActivityRecognition();
+        super.onDestroy();
     }
 
     @Override
@@ -54,12 +84,23 @@ public class MYAServiceMobile extends MYAService {
 
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
-        if (intent.getAction() != null) {
-            switch (intent.getAction()) {
-                case COMMAND_SET_SUSPEND:
-                    // cancel all notifications
-                    ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-                    break;
+        if (intent != null) {
+            if (intent.getAction() != null) {
+                switch (intent.getAction()) {
+                    case COMMAND_SET_SUSPEND:
+                        // cancel all notifications
+                        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+                        break;
+                    case COMMAND_ACTIVITY_CHANGED:
+                        if (ActivityRecognitionResult.hasResult(intent)) {
+                            ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
+                            int type = result.getMostProbableActivity().getType();
+                            int confidence = result.getMostProbableActivity().getConfidence();
+
+                            setDriving(confidence > 60 && (type == DetectedActivity.IN_VEHICLE || type == DetectedActivity.ON_BICYCLE));
+                        }
+                        break;
+                }
             }
         }
 
@@ -132,11 +173,16 @@ public class MYAServiceMobile extends MYAService {
                 .build();
         mNotificationManager.notify(1, notification);
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        if (mDelayedNotifyCancelTimer != null) {
+            mDelayedNotifyCancelTimer.cancel();
+            mDelayedNotifyCancelTimer.purge();
+        }
+        mDelayedNotifyCancelTimer = new Timer();
+        mDelayedNotifyCancelTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 mNotificationManager.cancelAll();
+                mDelayedNotifyCancelTimer = null;
             }
         }, NOTIFICATION_REST_COMPLETED_TIMEOUT_MS);
     }
@@ -162,5 +208,55 @@ public class MYAServiceMobile extends MYAService {
                 .setProgress((int) minimumRestSteps, (int) (minimumRestSteps - restStepsNeed), false)
                 .build();
         mNotificationManager.notify(2, notification);
+    }
+
+    private void startActivityRecognition() {
+        mGoogleApiClientAR = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(final Bundle bundle) {
+                        final Intent intent = new Intent(MYAServiceMobile.this, MYAServiceMobile.class);
+                        intent.setAction(MYAServiceMobile.COMMAND_ACTIVITY_CHANGED);
+                        mARPIntent = PendingIntent.getService(MYAServiceMobile.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        final PendingResult<Status> pendingResult = ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(mGoogleApiClientAR, ACTIVITY_DETECTION_INTERVAL_MILLIS, mARPIntent);
+                        pendingResult.setResultCallback(new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                Log.d(TAG, "requestActivityUpdates: " + status.isSuccess());
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(final int i) {
+                    }
+                }).addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(final ConnectionResult connectionResult) {
+                        Log.e(TAG, "onConnectionFailed has resolution: " + connectionResult.hasResolution() + " : " + connectionResult.toString());
+                    }
+                }).addApi(ActivityRecognition.API)
+                .build();
+
+        if (mGoogleApiClientAR != null) {
+            mGoogleApiClientAR.connect();
+        }
+    }
+
+    private void stopActivityRecognition() {
+        if (mARPIntent != null) {
+            Log.d(TAG, "stopActivityRecognition");
+            final PendingResult<Status> pendingResult = ActivityRecognition.ActivityRecognitionApi.removeActivityUpdates(mGoogleApiClientAR, mARPIntent);
+            pendingResult.setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    Log.d(TAG, "removeActivityUpdates: " + status.isSuccess());
+                }
+            });
+        }
+
+        if (mGoogleApiClientAR != null) {
+            mGoogleApiClientAR.disconnect();
+        }
     }
 }

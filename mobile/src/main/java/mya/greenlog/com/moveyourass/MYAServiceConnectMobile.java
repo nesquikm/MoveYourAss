@@ -10,6 +10,7 @@ import myaddd.greenlog.com.shared.State;
 public class MYAServiceConnectMobile extends MYAServiceConnect {
     public MYAServiceConnectMobile(final Context context, final OnStateChangedListener onStateChangedListener) {
         super(context, onStateChangedListener);
+        MYAServiceAutostartMobile.startService(context);
     }
 
     public static void sendToServiceSuspend(Context context, State.SuspendState suspendState, long timeoutSeconds) {

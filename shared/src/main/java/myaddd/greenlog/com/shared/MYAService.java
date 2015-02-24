@@ -83,14 +83,16 @@ public abstract class MYAService extends Service implements SensorEventListener,
 
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
-        if (intent.getAction() != null) {
-            switch (intent.getAction()) {
-                case COMMAND_SET_SUSPEND:
-                    mState.setSuspend(
-                            State.SuspendState.valueOf(intent.getIntExtra(COMMAND_SET_SUSPEND_STATE, State.SuspendState.NotSuspended.ordinal())),
-                            intent.getLongExtra(COMMAND_SET_SUSPEND_TIMEOUT, 0)
-                    );
-                    break;
+        if (intent != null) {
+            if (intent.getAction() != null) {
+                switch (intent.getAction()) {
+                    case COMMAND_SET_SUSPEND:
+                        mState.setSuspend(
+                                State.SuspendState.valueOf(intent.getIntExtra(COMMAND_SET_SUSPEND_STATE, State.SuspendState.NotSuspended.ordinal())),
+                                intent.getLongExtra(COMMAND_SET_SUSPEND_TIMEOUT, 0)
+                        );
+                        break;
+                }
             }
         }
         return Service.START_STICKY;
@@ -153,8 +155,10 @@ public abstract class MYAService extends Service implements SensorEventListener,
     }
 
     private void stopWearConnection() {
-        Wearable.DataApi.removeListener(mGoogleApiClientWear, this);
-        mGoogleApiClientWear.disconnect();
+        if (mGoogleApiClientWear != null) {
+            Wearable.DataApi.removeListener(mGoogleApiClientWear, this);
+            mGoogleApiClientWear.disconnect();
+        }
     }
 
     private void startSettingsSynchronizer() {
@@ -346,6 +350,10 @@ public abstract class MYAService extends Service implements SensorEventListener,
         } catch (final RemoteException e) {
             mClients.remove(to);
         }
+    }
+
+    protected void setDriving(boolean isDriving) {
+        mState.setDriving(isDriving);
     }
 
     protected abstract void onInactivityExpired();
