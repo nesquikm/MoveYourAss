@@ -11,12 +11,13 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+// TODO: remove <item>5</item> from inactivity_timeout.xml!
+
 public class State {
     private static final String TAG = State.class.getSimpleName();
     private static final String STATE_FILE_KEY = "com.greenlog.moveyourass.STATE_FILE_KEY";
 
     private static final long SEND_STATE_PERIOD_MS = 10 * 1000;
-    private static final long DND_DRIVING_CLEAR_TIMEOUT_MS = 60 * 1000;
     private static final long ANALYZE_PERIOD_MS = 1 * 60 * 1000;
 
     private final Context mContext;
@@ -362,7 +363,7 @@ public class State {
 
         // Check for DNDDriving
         if (mSuspendState == SuspendState.DNDDriving) {
-            if (!mSettingsManager.readDNDDrivingEnabled() || (now > mSuspendStateChangedTime + DND_DRIVING_CLEAR_TIMEOUT_MS && !mIsDriving)) {
+            if (!mSettingsManager.readDNDDrivingEnabled() || !mIsDriving) {
                 updateSuspend(now, SuspendState.NotSuspended, 0);
                 isSuspendStateChanged = true;
             }

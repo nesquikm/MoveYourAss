@@ -30,6 +30,7 @@ import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -47,6 +48,8 @@ public abstract class MYAService extends Service implements SensorEventListener,
 
     private static final int STEP_COUNTER_RATE_US = 1000 * 1000 * 30;
 
+    private static final long DRIVING_CLEAR_TIMEOUT_MS = 60 * 1000;
+
     protected SettingsManager mSettingsManager;
     private Timer mSettingsSyncTimer;
     private DataMap mLastReceivedSettingsDataMap;
@@ -61,6 +64,10 @@ public abstract class MYAService extends Service implements SensorEventListener,
 
     private Messenger mIncomingMessenger;
     private final ArrayList<Messenger> mClients = new ArrayList<Messenger>();
+
+    private Long mIsDrivingLastTime = null;
+    private Timer mIsDrivingClearTimer = null;
+
 
     @Override
     public void onCreate() {
@@ -78,6 +85,8 @@ public abstract class MYAService extends Service implements SensorEventListener,
         startStepCounter();
 
         startClientIO();
+
+        startIsDrivingClearTimer();
     }
 
 
@@ -113,6 +122,8 @@ public abstract class MYAService extends Service implements SensorEventListener,
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
 
+        stopIsDrivingClearTimer();
+
         stopClientIO();
 
         stopStepCounter();
@@ -121,6 +132,31 @@ public abstract class MYAService extends Service implements SensorEventListener,
         stopWearConnection();
 
         super.onDestroy();
+    }
+
+    private void startIsDrivingClearTimer() {
+        mIsDrivingClearTimer = new Timer();
+        mIsDrivingClearTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                synchronized (mIsDrivingClearTimer) {
+                    if (mIsDrivingLastTime != null) {
+                        long now = new Date().getTime();
+                        if (now - mIsDrivingLastTime > DRIVING_CLEAR_TIMEOUT_MS) {
+                            mState.setDriving(false);
+                            mIsDrivingLastTime = null;
+                        }
+                    }
+                }
+            }
+        }, DRIVING_CLEAR_TIMEOUT_MS, DRIVING_CLEAR_TIMEOUT_MS);
+    }
+
+    private void stopIsDrivingClearTimer() {
+        if (mIsDrivingClearTimer != null) {
+            mIsDrivingClearTimer.cancel();
+            mIsDrivingClearTimer.purge();
+        }
     }
 
     private void startWearConnection() {
@@ -351,8 +387,13 @@ public abstract class MYAService extends Service implements SensorEventListener,
         }
     }
 
-    protected void setDriving(boolean isDriving) {
-        mState.setDriving(isDriving);
+    protected void setDriving() {
+        synchronized (mIsDrivingClearTimer) {
+            if (mIsDrivingLastTime == null) {
+                mState.setDriving(true);
+            }
+            mIsDrivingLastTime = new Date().getTime();
+        }
     }
 
     protected abstract void onInactivityExpired();

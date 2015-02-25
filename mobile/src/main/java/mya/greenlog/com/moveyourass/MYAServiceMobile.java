@@ -30,7 +30,7 @@ import myaddd.greenlog.com.shared.SnoozeModes;
 import myaddd.greenlog.com.shared.State;
 
 public class MYAServiceMobile extends MYAService {
-    private static final String TAG = MYAService.class.getSimpleName();
+    private static final String TAG = MYAServiceMobile.class.getSimpleName();
 
     private NotificationManager mNotificationManager;
     private static final long[] VIBRATION_PATTERN_NEED_REST = {0, 150, 500, 150, 500, 150};
@@ -96,8 +96,9 @@ public class MYAServiceMobile extends MYAService {
                             ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
                             int type = result.getMostProbableActivity().getType();
                             int confidence = result.getMostProbableActivity().getConfidence();
-
-                            setDriving(confidence > 60 && (type == DetectedActivity.IN_VEHICLE || type == DetectedActivity.ON_BICYCLE));
+                            if (confidence > 60 && (type == DetectedActivity.IN_VEHICLE || type == DetectedActivity.ON_BICYCLE)) {
+                                setDriving();
+                            }
                         }
                         break;
                 }
