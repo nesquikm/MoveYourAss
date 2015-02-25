@@ -387,6 +387,13 @@ public class State {
         boolean restCompletedTrigger = !mIsRestCompleted && isRestCompleted;
         mIsRestCompleted = isRestCompleted;
 
+        // When a user just completed the rest (for example, 50 steps) and set minimum steps
+        // for completed above previous (for example, 100), he shouldn't see 'need rest'
+        // notification again. So, increase step count here :)
+        if (restCompletedTrigger) {
+            updateStepCounter(now, 1000 * 1000 * 1000);
+        }
+
         // Check for NextOverstay, only clear
         if (mSuspendState == SuspendState.NextOverstay) {
             if (restCompletedTrigger) {
